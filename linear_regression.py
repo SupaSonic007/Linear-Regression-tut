@@ -11,7 +11,6 @@ def hypothesis(theta, X):
     return theta[0]+theta[1]*X
 
 def cost_calc(theta, X, y):
-    #! RuntimeWarning: overflow encountered in double_scalars
     return (1/2*m) * np.sum((hypothesis(theta, X)-y)**2)
 
 
@@ -23,7 +22,6 @@ def gradient_descent(theta, X, y, epoch, alpha):
     
     while i < epoch:
         hx = hypothesis(theta, X)
-        #! RuntimeWarning: invalid value encountered in double_scalars
         theta[0] -= alpha * (sum(hx-y)/m)
         theta[1] -= (alpha * np.sum((hx-y)*X))/m
         cost.append(cost_calc(theta, X, y))
@@ -35,13 +33,19 @@ def predict(theta, X, y, epoch, alpha):
     theta, cost = gradient_descent(theta, X, y, epoch, alpha)
     return hypothesis(theta, X), cost, theta
 
-y_predict, cost, theta = predict(theta, df[0],df[1], 1000, 0.1)
+y_predict, cost, theta = predict(theta, df[0],df[1], 2000, 0.01)
 
+print(y_predict.head())
 plt.figure()
 plt.scatter(df[0], df[1], label="Original Y")
 plt.scatter(df[0], y_predict, label="Predicted Y")
 plt.legend(loc="upper left")
 plt.xlabel("input feature")
 plt.ylabel("original and predicted output")
+plt.savefig('Linear Regression')
+plt.show()
 
+plt.figure()
+plt.scatter(range(0, len(cost)), cost)
+plt.savefig('Linear Regression Costs x Iterations')
 plt.show()
